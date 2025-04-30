@@ -196,7 +196,7 @@
   }
 
   function initParticles() {
-    particlesArray = Array.from({ length: 100 }, () => ({
+    particlesArray = Array.from({ length: 70 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       baseSize: Math.random() * 3 + 1,
@@ -276,40 +276,58 @@
   }
 
   function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (analyser) {
-      analyser.getByteFrequencyData(dataArray);
+  if (analyser) {
+    analyser.getByteFrequencyData(dataArray);
 
-      let bass = 0;
-      for (let i = 0; i < 10; i++) {
-        bass += dataArray[i];
-      }
-      bass /= 10;
-
-      const bassFactor = Math.max(0.8, bass / 30);
-      hueShift = (hueShift + bass / 100) % 360;
-
-      particlesArray.forEach(p => {
-        p.size = p.baseSize * (1 + bassFactor * 3);
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${hueShift}, 100%, 60%)`;
-        ctx.fill();
-
-        p.x += p.speedX;
-        p.y += p.speedY;
-
-        if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
-        if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
-      });
-
-      connectParticles(); // <-- вызываем отрисовку паутинки после частиц
+    let bass = 0;
+    for (let i = 0; i < 10; i++) {
+      bass += dataArray[i];
     }
+    bass /= 10;
 
-    requestAnimationFrame(animate);
+    const bassFactor = Math.max(0.8, bass / 30);
+    const linkDistance = 120 + bassFactor * 30; // дальность связей между частицами
+
+    hueShift = (hueShift + bass / 100) % 360;
+
+    particlesArray.forEach(p => {
+      p.size = p.baseSize * (1 + bassFactor * 3);
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `hsl(${hueShift}, 100%, 60%)`;
+      ctx.fill();
+
+      p.x += p.speedX + (Math.random() - 0.5) * bassFactor;
+      p.y += p.speedY + (Math.random() - 0.5) * bassFactor;
+
+      if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
+      if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
+    });
+
+    // Рисуем паутинку
+    for (let i = 0; i < particlesArray.length; i++) {
+      for (let j = i + 1; j < particlesArray.length; j++) {
+        const dx = particlesArray[i].x - particlesArray[j].x;
+        const dy = particlesArray[i].y - particlesArray[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < linkDistance) {
+          ctx.beginPath();
+          ctx.strokeStyle = `hsla(${hueShift}, 100%, 60%, ${1 - distance / linkDistance})`;
+          ctx.lineWidth = 1;
+          ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+          ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+          ctx.stroke();
+        }
+      }
+    }
   }
+
+  requestAnimationFrame(animate);
+}
 
   startButton.addEventListener('click', () => {
     overlay.style.display = 'none';
