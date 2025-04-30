@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kaznos MC⛏️</title>
+  <link rel="icon" href="https://i.pinimg.com/736x/41/ec/51/41ec519450f2d6eab830e86b97cd7d69.jpg">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; font-family: 'Comic Sans MS', cursive; background: #0c0c0c; color: white; overflow: hidden; }
+    .overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #0c0c0c; display: flex; align-items: center; justify-content: center; z-index: 1000;
+    }
+    .overlay button {
+      padding: 20px 40px; border: none; border-radius: 30px;
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      font-size: 2em; font-weight: bold; color: #000; cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .container {
+      display: flex; width: 100%; height: 100%;
+      opacity: 0; visibility: hidden; transition: opacity 2s;
+      position: relative; z-index: 1;
+    }
+    .video-side, .center-content { height: 100%; display: flex; align-items: center; justify-content: center; }
+    .video-side { width: 25%; position: relative; overflow: hidden; }
+    .video-side iframe {
+      position: absolute; top: 50%; left: 50%;
+      width: 120%; height: 120%;
+      transform: translate(-50%, -50%); pointer-events: none;
+    }
+    .center-content {
+      width: 50%; flex-direction: column; text-align: center;
+      transform: translateY(50px); opacity: 0;
+      transition: opacity 2s, transform 2s;
+    }
+    h1 { font-size: 3em; margin-bottom: 20px; }
+    p { font-size: 1.2em; margin: 10px 0; }
+    .server-address {
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      color: #000; padding: 10px 20px; margin: 5px;
+      border-radius: 30px; font-weight: bold; display: inline-block;
+    }
+    .download-btn {
+      margin-top: 20px; padding: 15px 30px;
+      background: linear-gradient(45deg, #ffcc00, #ff6600);
+      border: none; border-radius: 50px;
+      font-size: 1.5em; font-weight: bold; color: #000; cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    #player-count { margin-top: 20px; font-size: 1.5em; color: #00ff88; font-weight: bold; }
+    canvas#particles {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+    audio { display: none; }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="overlay" id="overlay">
+  <button id="startButton">Войти на сайт 🚀</button>
+</div>
+
+<audio id="background-audio" loop>
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="mainContent">
+  <div class="video-side">
+    <iframe src="https://www.youtube.com/embed/Kq1PD-NfidQ?autoplay=1&mute=1&loop=1&playlist=Kq1PD-NfidQ" allow="autoplay"></iframe>
+  </div>
+
+  <div class="center-content" id="textContent">
+    <h1>Kaznos Server 🎉⛏️</h1>
+    <button class="download-btn" onclick="window.open('https://tlauncher.org/ru/', '_blank')">Скачать TLauncher 🚀</button>
+    <p>🎮 Версия сервера: <strong>Vanilla 1.21.5</strong></p>
+    <p>🌍 Наши адреса:</p>
+    <div>
+      <span class="server-address">kaznos.mclan.ru</span>
+      <span class="server-address">kaznos.sosal.today</span>
+    </div>
+    <div id="player-count">Игроков онлайн: Загрузка... ⏳</div>
+  </div>
+
+  <div class="video-side">
+    <iframe src="https://www.youtube.com/embed/w3kejmZT0Xw?start=10&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+const audio = document.getElementById('background-audio');
+const overlay = document.getElementById('overlay');
+const startButton = document.getElementById('startButton');
+const mainContent = document.getElementById('mainContent');
+const textContent = document.getElementById('textContent');
+const playerCountElement = document.getElementById('player-count');
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+
+let particlesArray = [];
+let hueShift = 120;
+
+window.addEventListener('resize', resizeCanvas);
+
+startButton.addEventListener('click', () => {
+  overlay.style.display = 'none';
+  fadeInContent();
+  graduallyIncreaseVolume();
+  setupParticles();
+  fetchPlayerCount();
+});
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function fadeInContent() {
+  mainContent.style.visibility = 'visible';
+  setTimeout(() => {
+    mainContent.style.opacity = 1;
+    textContent.style.opacity = 1;
+    textContent.style.transform = 'translateY(0)';
+  }, 100);
+}
+
+function graduallyIncreaseVolume(targetVolume = 0.5) {
+  audio.volume = 0;
+  audio.play();
+  let vol = 0;
+  const interval = setInterval(() => {
+    if (vol < targetVolume) {
+      vol = Math.min(vol + 0.01, targetVolume);
+      audio.volume = vol;
+    } else {
+      clearInterval(interval);
+    }
+  }, 200);
+}
+
+async function fetchPlayerCount() {
+  try {
+    const urls = ['https://api.mcsrvstat.us/2/kaznos.mclan.ru', 'https://api.mcsrvstat.us/2/kaznos.sosal.today'];
+    let totalPlayers = 0;
+    for (const url of urls) {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data?.players?.online) {
+        totalPlayers += data.players.online;
+      }
+    }
+    playerCountElement.textContent = `Игроков онлайн: ${totalPlayers} 🔥`;
+  } catch {
+    playerCountElement.textContent = 'Ошибка загрузки онлайн 😵';
+  }
+}
+
+function setupParticles() {
+  resizeCanvas();
+  for (let i = 0; i < 85; i++) {
+    particlesArray.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 3 + 1,
+      speedX: (Math.random() - 0.5) * 2,
+      speedY: (Math.random() - 0.5) * 2
+    });
+  }
+  animateParticles();
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particlesArray.forEach(p => {
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `hsl(${hueShift}, 100%, 60%)`;
+    ctx.fill();
+  });
+  connectParticles();
+  hueShift += 0.5;
+  requestAnimationFrame(animateParticles);
+}
+
+function connectParticles() {
+  for (let a = 0; a < particlesArray.length; a++) {
+    for (let b = a + 1; b < particlesArray.length; b++) {
+      const dx = particlesArray[a].x - particlesArray[b].x;
+      const dy = particlesArray[a].y - particlesArray[b].y;
+      const distance = Math.sqrt(dx*dx + dy*dy);
+      if (distance < 100) {
+        ctx.beginPath();
+        ctx.strokeStyle = `hsla(${hueShift}, 100%, 60%, ${1 - distance/100})`;
+        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+</script>
+
+</body>
+</html>
