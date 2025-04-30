@@ -53,9 +53,21 @@
       opacity: 0;
       transition: opacity 2s ease;
     }
-    .video-side {
-      width: 25%;
-      height: 100%;
+   .video-side {
+    width: 25%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    }
+
+    .video-side iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
     }
     .center-content {
       width: 50%;
@@ -69,11 +81,6 @@
       opacity: 0;
       transform: translateY(50px);
       transition: opacity 2s ease, transform 2s ease;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
     }
     h1 {
       font-size: 3em;
@@ -171,7 +178,7 @@
 
 <script>
   const audio = document.getElementById('background-audio');
-  audio.volume = 0.7; // громкость 70%
+  audio.volume = 0.5; // громкость 50%
 
   document.getElementById('startButton').addEventListener('click', async function() {
     document.getElementById('overlay').style.display = 'none';
@@ -190,13 +197,13 @@
     audio.play();
     let vol = 0;
     const interval = setInterval(() => {
-      if (vol < 0.7) {
-        vol += 0.05;
+      if (vol < 0.5) {
+        vol += 0.005;
         audio.volume = Math.min(vol, 0.7);
       } else {
         clearInterval(interval);
       }
-    }, 200);
+    }, 100);
   });
 
   // Анимация частиц
