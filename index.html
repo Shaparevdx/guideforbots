@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaznos MC⛏️</title>
+  <link rel="icon" href="https://i.pinimg.com/736x/41/ec/51/41ec519450f2d6eab830e86b97cd7d69.jpg">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #0c0c0c;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0c0c0c;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay-btn {
+      padding: 20px 40px;
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      border: none;
+      border-radius: 30px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    .container {
+      width: 250px;
+      height: 150px;
+      margin: auto;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ff88;
+      border-radius: 20px;
+      padding: 10px;
+      text-align: center;
+    }
+    .center-content {
+      width: 100%;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 2s ease, transform 2s ease;
+    }
+    h1 {
+      font-size: 1em;
+      margin-bottom: 10px;
+      animation: fadeInDown 1s ease;
+    }
+    p {
+      font-size: 0.8em;
+      margin: 5px 0;
+    }
+    .server-address {
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      color: #000;
+      padding: 5px 10px;
+      margin: 5px 2px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+      font-size: 0.8em;
+    }
+    .download-btn {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: linear-gradient(45deg, #ffcc00, #ff6600);
+      border: none;
+      border-radius: 30px;
+      font-size: 1em;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    @keyframes fadeInDown {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes pulse {
+      0% {transform: scale(1);}
+      50% {transform: scale(1.05);}
+      100% {transform: scale(1);}
+    }
+    #player-count {
+      margin-top: 10px;
+      font-size: 0.8em;
+      color: #00ff88;
+      font-weight: bold;
+    }
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="overlay" id="overlay">
+  <button class="overlay-btn" id="startButton">Войти на сайт 🚀</button>
+</div>
+
+<audio id="background-audio" loop>
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="mainContent">
+  <div class="center-content" id="textContent">
+    <h1>Kaznos Server 🎉⛏️</h1>
+    <button class="download-btn" onclick="window.location.href='https://tlauncher.org/ru/'">Скачать 🚀</button>
+    <p>Версия: <strong>Vanilla 1.21.5</strong> ✅</p>
+    <p>Сервер:</p>
+    <div>
+      <span class="server-address">kaznos.mclan.ru</span>
+      <span class="server-address">kaznos.sosal.today</span>
+    </div>
+    <div id="player-count">Игроков онлайн: Загрузка... ⏳</div>
+  </div>
+</div>
+
+<script>
+// Всё твое же, без изменений
+const audio = document.getElementById('background-audio');
+const overlay = document.getElementById('overlay');
+const startButton = document.getElementById('startButton');
+const mainContent = document.getElementById('mainContent');
+const textContent = document.getElementById('textContent');
+const playerCountElement = document.getElementById('player-count');
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+
+let particlesArray = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  particlesArray = Array.from({ length: 85 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    baseSize: Math.random() * 3 + 1,
+    size: 1,
+    speedX: (Math.random() - 0.5) * 1.8,
+    speedY: (Math.random() - 0.5) * 1.8
+  }));
+}
+
+async function fetchPlayerCount() {
+  try {
+    const urls = [
+      'https://api.mcsrvstat.us/2/kaznos.mclan.ru',
+      'https://api.mcsrvstat.us/2/kaznos.sosal.today'
+    ];
+
+    let totalPlayers = 0;
+
+    for (const url of urls) {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data && data.players && typeof data.players.online === 'number') {
+        totalPlayers += data.players.online;
+      }
+    }
+
+    playerCountElement.textContent = `Игроков онлайн: ${totalPlayers} 🔥`;
+  } catch (error) {
+    playerCountElement.textContent = 'Ошибка загрузки онлайн 😵';
+  }
+}
+
+function fadeInContent() {
+  mainContent.style.visibility = 'visible';
+  setTimeout(() => {
+    mainContent.style.opacity = 1;
+    textContent.style.opacity = 1;
+    textContent.style.transform = 'translateY(0)';
+  }, 100);
+}
+
+function graduallyIncreaseVolume(targetVolume = 0.5, step = 0.01, intervalTime = 200) {
+  audio.volume = 0;
+  audio.play();
+  let vol = 0;
+  const interval = setInterval(() => {
+    if (vol < targetVolume) {
+      vol = Math.min(vol + step, targetVolume);
+      audio.volume = vol;
+    } else {
+      clearInterval(interval);
+    }
+  }, intervalTime);
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let particle of particlesArray) {
+    particle.x += particle.speedX;
+    particle.y += particle.speedY;
+
+    if (particle.x < 0 || particle.x > canvas.width) particle.speedX = -particle.speedX;
+    if (particle.y < 0 || particle.y > canvas.height) particle.speedY = -particle.speedY;
+
+    ctx.beginPath();
+    ctx.arc(particle.x, particle.y, particle.baseSize, 0, Math.PI * 2);
+    ctx.fillStyle = '#00ff88';
+    ctx.fill();
+  }
+
+  requestAnimationFrame(animate);
+}
+
+startButton.addEventListener('click', () => {
+  overlay.style.display = 'none';
+  fadeInContent();
+  graduallyIncreaseVolume();
+  fetchPlayerCount();
+  resizeCanvas();
+  initParticles();
+  animate();
+});
+
+window.addEventListener('resize', () => {
+  resizeCanvas();
+  initParticles();
+});
+</script>
+
+</body>
+</html>
