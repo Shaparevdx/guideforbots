@@ -20,12 +20,36 @@
       overflow: hidden;
       position: relative;
     }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0c0c0c;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay-btn {
+      padding: 20px 40px;
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      border: none;
+      border-radius: 30px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
     .container {
       display: flex;
       width: 100%;
       height: 100vh;
       position: relative;
       z-index: 1;
+      visibility: hidden;
     }
     .video-side {
       width: 25%;
@@ -104,53 +128,21 @@
     audio {
       display: none;
     }
-
-    /* Оверлей */
-    #overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #0c0c0c;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      transition: opacity 0.8s ease;
-    }
-    #overlay.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #enter-btn {
-      padding: 20px 40px;
-      font-size: 2em;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(45deg, #00ff88, #00c3ff);
-      color: #000;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      animation: pulse 2s infinite;
-    }
   </style>
 </head>
-
 <body>
-
-<!-- Оверлей с кнопкой -->
-<div id="overlay">
-  <button id="enter-btn">Войти на сайт 🚀</button>
-</div>
 
 <canvas id="particles"></canvas>
 
-<audio autoplay loop>
+<div class="overlay" id="overlay">
+  <button class="overlay-btn" id="startButton">Войти на сайт 🚀</button>
+</div>
+
+<audio id="background-audio" loop>
   <source src="audio.mp3" type="audio/mpeg">
 </audio>
 
-<div class="container">
+<div class="container" id="mainContent">
   <div class="video-side">
     <iframe src="https://www.youtube.com/embed/Kq1PD-NfidQ?autoplay=1&mute=1&loop=1&playlist=Kq1PD-NfidQ" allow="autoplay"></iframe>
   </div>
@@ -168,24 +160,16 @@
   </div>
 
   <div class="video-side">
-    <iframe 
-      src="https://www.youtube.com/embed/w3kejmZT0Xw?start=10&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&showinfo=0" 
-      allow="autoplay" 
-      frameborder="0" 
-      allowfullscreen>
-    </iframe>
+    <iframe src="https://www.youtube.com/embed/w3kejmZT0Xw?start=10&autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&showinfo=0" allow="autoplay" frameborder="0" allowfullscreen></iframe>
   </div>
 </div>
 
 <script>
-  // Логика кнопки оверлея
-  document.getElementById('enter-btn').addEventListener('click', function() {
-    const overlay = document.getElementById('overlay');
-    overlay.classList.add('fade-out');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      document.body.style.overflow = 'auto'; // Разрешаем скролл после исчезновения
-    }, 800); // Соответствует времени transition
+  // Кнопка запуска сайта и музыки
+  document.getElementById('startButton').addEventListener('click', function() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('mainContent').style.visibility = 'visible';
+    document.getElementById('background-audio').play();
   });
 
   // Анимация частиц
