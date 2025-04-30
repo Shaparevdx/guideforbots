@@ -1,226 +1,232 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kaznos Minecraft Server</title>
-  <link rel="icon" href="https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/73/Grass_Block.png">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body, html {
-      width: 100%;
-      height: 100%;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: #0c0c0c;
-      color: #fff;
-      overflow: hidden;
-    }
-    .container {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-      position: relative;
-    }
-    .video-side {
-      width: 25%;
-      height: 100%;
-    }
-    .center-content {
-      width: 50%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      text-align: center;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 20px;
-      animation: fadeInDown 1s ease;
-    }
-    p {
-      font-size: 1.5em;
-      margin: 10px 0;
-    }
-    .server-address {
-      background: linear-gradient(45deg, #00ff88, #00c3ff);
-      color: #000;
-      padding: 10px 20px;
-      margin: 10px 5px;
-      border-radius: 30px;
-      font-weight: bold;
-      display: inline-block;
-      font-size: 1.3em;
-    }
-    .download-btn {
-      margin-top: 20px;
-      padding: 15px 30px;
-      background: linear-gradient(45deg, #ffcc00, #ff6600);
-      border: none;
-      border-radius: 50px;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #000;
-      cursor: pointer;
-      animation: pulse 2s infinite;
-    }
-    @keyframes fadeInDown {
-      from {opacity: 0; transform: translateY(-50px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes pulse {
-      0% {transform: scale(1);}
-      50% {transform: scale(1.1);}
-      100% {transform: scale(1);}
-    }
-    #player-count {
-      margin-top: 20px;
-      font-size: 1.5em;
-      color: #00ff88;
-      font-weight: bold;
-    }
-    .bottom-video {
-      position: absolute;
-      bottom: 0;
-      left: 25%;
-      width: 50%;
-      height: calc(100% - 70%); /* подгоняем, можно варьировать */
-      z-index: -1;
-      opacity: 0.7;
-    }
-    canvas#particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-    }
-    audio {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaznos Minecraft Server 🚀</title>
+    <link rel="icon" href="https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/73/Grass_Block.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: #0c0c0c;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            animation: fadeIn 2s ease-out;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            min-height: 80vh;
+            position: relative;
+            z-index: 2;
+        }
+        .video-container, .video-container-right {
+            flex: 1;
+            height: 80vh;
+            padding: 10px;
+        }
+        .video-container iframe, .video-container-right iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,255,136,0.5);
+        }
+        .content {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+            animation: fadeInUp 2s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {opacity: 0; transform: translateY(50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        .content p {
+            margin: 20px 0;
+            font-size: 24px;
+        }
+        .download-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #00ff88, #00c3ff);
+            border: none;
+            border-radius: 50px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {transform: scale(1);}
+            50% {transform: scale(1.05);}
+            100% {transform: scale(1);}
+        }
+        .server-address {
+            display: inline-block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background: #00ff88;
+            color: #000;
+            font-weight: bold;
+            border-radius: 30px;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .bottom-video {
+            width: 100%;
+            height: 20vh;
+            overflow: hidden;
+            padding: 10px;
+        }
+        .bottom-video iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        #loader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #0c0c0c;
+            color: #00ff88;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            z-index: 999;
+            animation: fadeOut 2s 2s forwards;
+        }
+        @keyframes fadeOut {
+            to {opacity: 0; visibility: hidden;}
+        }
+    </style>
 </head>
 <body>
-
+<div id="loader">Загрузка...</div>
 <canvas id="particles"></canvas>
-<audio autoplay loop>
-  <source src="https://cdn.pixabay.com/audio/2022/12/17/audio_f8b2c2b2f4.mp3" type="audio/mp3">
-</audio>
-
-<div class="container">
-  <div class="video-side">
-    <iframe src="https://www.youtube.com/embed/Kq1PD-NfidQ?autoplay=1&mute=1&loop=1&playlist=Kq1PD-NfidQ" allow="autoplay"></iframe>
-  </div>
-
-  <div class="center-content">
+<header>
     <h1>Добро пожаловать на Kaznos Server! 🎉⛏️</h1>
-    <button class="download-btn" onclick="window.location.href='https://tlauncher.org/ru/'">Скачать TLauncher 🚀</button>
-    <p>🎮 Установи версию: <strong>Vanilla 1.21.5</strong> ✅</p>
-    <p>🌍 Заходи на наш сервер:</p>
-    <div>
-      <span class="server-address">kaznos.mclan.ru</span>
-      <span class="server-address">kaznos.sosal.today</span>
+</header>
+<div class="main-container">
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/sE3yde9IYbU?autoplay=1&mute=1&loop=1&playlist=sE3yde9IYbU" allow="autoplay"></iframe>
     </div>
-    <div id="player-count">Игроков онлайн: Загрузка... ⏳</div>
-  </div>
-
-  <div class="video-side">
-    <iframe src="https://www.youtube.com/embed/FS8k6kzR9Jw?autoplay=1&mute=1&loop=1&playlist=FS8k6kzR9Jw" allow="autoplay"></iframe>
-  </div>
-
-  <div class="bottom-video">
-    <iframe src="https://www.youtube.com/embed/6I6qFz2-0t8?autoplay=1&mute=1&loop=1&playlist=6I6qFz2-0t8" allow="autoplay"></iframe>
-  </div>
+    <div class="content">
+        <p>📥 Скачай <strong>TLauncher</strong> прямо сейчас!</p>
+        <button class="download-btn" onclick="window.location.href='https://tlauncher.org/ru/'">Скачать TLauncher 🚀</button>
+        <p>🎮 Установи версию: <strong>Vanilla 1.21.5</strong></p>
+        <p>🌍 Заходи на наш сервер:</p>
+        <div class="server-address">kaznos.mclan.ru</div>
+        <div class="server-address">kaznos.sosal.today</div>
+        <div id="player-count">Игроков онлайн: Загрузка... ⏳</div>
+    </div>
+    <div class="video-container-right">
+        <iframe src="https://www.youtube.com/embed/FS8k6kzR9Jw?autoplay=1&mute=0&loop=1&playlist=FS8k6kzR9Jw" allow="autoplay"></iframe>
+    </div>
 </div>
-
+<div class="bottom-video">
+    <iframe src="https://www.youtube.com/embed/7ghhRHRP6t4?autoplay=1&mute=1&loop=1&playlist=7ghhRHRP6t4" allow="autoplay"></iframe>
+</div>
+<audio autoplay loop>
+    <source src="audio.mp3" type="audio/mpeg">
+</audio>
 <script>
-  // Анимация частиц
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  let particlesArray;
+    // Фоновые частицы
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
 
-  function initParticles() {
-    particlesArray = [];
-    const numberOfParticles = 100;
-    for (let i = 0; i < numberOfParticles; i++) {
-      particlesArray.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 5 + 1,
-        speedX: Math.random() * 3 - 1.5,
-        speedY: Math.random() * 3 - 1.5
-      });
+    function initParticles() {
+        particlesArray = [];
+        const numberOfParticles = 100;
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 5 + 1,
+                speedX: Math.random() * 3 - 1.5,
+                speedY: Math.random() * 3 - 1.5
+            });
+        }
     }
-  }
 
-  function handleParticles() {
-    for (let i = 0; i < particlesArray.length; i++) {
-      ctx.fillStyle = '#00ff88';
-      ctx.beginPath();
-      ctx.arc(particlesArray[i].x, particlesArray[i].y, particlesArray[i].size, 0, Math.PI * 2);
-      ctx.fill();
-      particlesArray[i].x += particlesArray[i].speedX;
-      particlesArray[i].y += particlesArray[i].speedY;
+    function handleParticles() {
+        for (let i = 0; i < particlesArray.length; i++) {
+            ctx.fillStyle = '#00ff88';
+            ctx.beginPath();
+            ctx.arc(particlesArray[i].x, particlesArray[i].y, particlesArray[i].size, 0, Math.PI * 2);
+            ctx.fill();
+            particlesArray[i].x += particlesArray[i].speedX;
+            particlesArray[i].y += particlesArray[i].speedY;
 
-      if (particlesArray[i].size > 0.2) particlesArray[i].size -= 0.05;
-      if (particlesArray[i].size <= 0.2) particlesArray[i].size = Math.random() * 5 + 1;
+            if (particlesArray[i].size > 0.2) particlesArray[i].size -= 0.05;
+            if (particlesArray[i].size <= 0.2) particlesArray[i].size = Math.random() * 5 + 1;
 
-      if (particlesArray[i].x > canvas.width || particlesArray[i].x < 0) {
-        particlesArray[i].speedX = -particlesArray[i].speedX;
-      }
-      if (particlesArray[i].y > canvas.height || particlesArray[i].y < 0) {
-        particlesArray[i].speedY = -particlesArray[i].speedY;
-      }
+            if (particlesArray[i].x > canvas.width || particlesArray[i].x < 0) particlesArray[i].speedX *= -1;
+            if (particlesArray[i].y > canvas.height || particlesArray[i].y < 0) particlesArray[i].speedY *= -1;
+        }
     }
-  }
 
-  function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    handleParticles();
-    requestAnimationFrame(animateParticles);
-  }
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        handleParticles();
+        requestAnimationFrame(animateParticles);
+    }
 
-  window.addEventListener('resize', function() {
+    window.addEventListener('resize', function() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+    });
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     initParticles();
-  });
+    animateParticles();
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  initParticles();
-  animateParticles();
-
-  // Счётчик игроков
-  async function fetchPlayerCount() {
-    try {
-      const response = await fetch('https://api.mcsrvstat.us/2/kaznos.mclan.ru');
-      const data = await response.json();
-      if (data && data.players) {
-        document.getElementById('player-count').innerText = `Игроков онлайн: ${data.players.online} 🔥`;
-      } else {
-        document.getElementById('player-count').innerText = 'Игроков онлайн: 0 😢';
-      }
-    } catch (e) {
-      document.getElementById('player-count').innerText = 'Ошибка загрузки онлайн 😵';
+    // Онлайн игроков
+    async function fetchPlayerCount() {
+        try {
+            const response = await fetch('https://api.mcsrvstat.us/2/kaznos.mclan.ru');
+            const data = await response.json();
+            if(data && data.players) {
+                document.getElementById('player-count').innerText = `Игроков онлайн: ${data.players.online} 🔥`;
+            } else {
+                document.getElementById('player-count').innerText = 'Игроков онлайн: 0 😢';
+            }
+        } catch (e) {
+            document.getElementById('player-count').innerText = 'Ошибка загрузки онлайн 😵';
+        }
     }
-  }
 
-  setInterval(fetchPlayerCount, 5000);
-  fetchPlayerCount();
+    setInterval(fetchPlayerCount, 5000);
+    fetchPlayerCount();
 </script>
-
 </body>
 </html>
