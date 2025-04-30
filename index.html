@@ -287,13 +287,13 @@
     }
     bass /= 10;
 
-    const bassFactor = Math.max(0.8, bass / 30);
+    const bassFactor = Math.max(0.8, bass / 40);
     const linkDistance = 120 + bassFactor * 30; // дальность связей между частицами
 
     hueShift = (hueShift + bass / 100) % 360;
 
     particlesArray.forEach(p => {
-      p.size = Math.max(1, p.baseSize * (0.5 + bassFactor * 2.5));
+      p.size = p.baseSize * (1 + bassFactor * 2.5); 
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
