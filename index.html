@@ -198,12 +198,12 @@
     let vol = 0;
     const interval = setInterval(() => {
       if (vol < 0.5) {
-        vol += 0.005;
-        audio.volume = Math.min(vol, 0.7);
+        vol += 0.01;
+        audio.volume = Math.min(vol, 0.5);
       } else {
         clearInterval(interval);
       }
-    }, 100);
+    }, 200);
   });
 
   // Анимация частиц
