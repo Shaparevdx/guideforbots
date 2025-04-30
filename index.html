@@ -50,6 +50,8 @@
       position: relative;
       z-index: 1;
       visibility: hidden;
+      opacity: 0;
+      transition: opacity 2s ease;
     }
     .video-side {
       width: 25%;
@@ -64,6 +66,9 @@
       align-items: center;
       padding: 20px;
       text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 2s ease, transform 2s ease;
     }
     iframe {
       width: 100%;
@@ -147,7 +152,7 @@
     <iframe src="https://www.youtube.com/embed/Kq1PD-NfidQ?autoplay=1&mute=1&loop=1&playlist=Kq1PD-NfidQ" allow="autoplay"></iframe>
   </div>
 
-  <div class="center-content">
+  <div class="center-content" id="textContent">
     <h1>Добро пожаловать на Kaznos Server! 🎉⛏️</h1>
     <button class="download-btn" onclick="window.location.href='https://tlauncher.org/ru/'">Скачать TLauncher 🚀</button>
     <p>🎮 Установи версию: <strong>Vanilla 1.21.5</strong> ✅</p>
@@ -165,11 +170,33 @@
 </div>
 
 <script>
-  // Кнопка запуска сайта и музыки
-  document.getElementById('startButton').addEventListener('click', function() {
+  const audio = document.getElementById('background-audio');
+  audio.volume = 0.7; // громкость 70%
+
+  document.getElementById('startButton').addEventListener('click', async function() {
     document.getElementById('overlay').style.display = 'none';
-    document.getElementById('mainContent').style.visibility = 'visible';
-    document.getElementById('background-audio').play();
+    const content = document.getElementById('mainContent');
+    const text = document.getElementById('textContent');
+
+    content.style.visibility = 'visible';
+    setTimeout(() => {
+      content.style.opacity = 1;
+      text.style.opacity = 1;
+      text.style.transform = 'translateY(0)';
+    }, 100);
+
+    // Плавное увеличение громкости
+    audio.volume = 0;
+    audio.play();
+    let vol = 0;
+    const interval = setInterval(() => {
+      if (vol < 0.7) {
+        vol += 0.05;
+        audio.volume = Math.min(vol, 0.7);
+      } else {
+        clearInterval(interval);
+      }
+    }, 200);
   });
 
   // Анимация частиц
