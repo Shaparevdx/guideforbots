@@ -200,25 +200,53 @@
       y: Math.random() * canvas.height,
       baseSize: Math.random() * 3 + 1,
       size: 1,
-      speedX: (Math.random() - 0.5) * 2.5, // Чуть быстрее (было *2, стало *2.5)
+      speedX: (Math.random() - 0.5) * 2.5,
       speedY: (Math.random() - 0.5) * 2.5
     }));
   }
 
-  function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function drawParticles() {
     particlesArray.forEach(p => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fillStyle = '#00ff88';
       ctx.fill();
+    });
+  }
 
+  function connectParticles() {
+    for (let a = 0; a < particlesArray.length; a++) {
+      for (let b = a + 1; b < particlesArray.length; b++) {
+        const dx = particlesArray[a].x - particlesArray[b].x;
+        const dy = particlesArray[a].y - particlesArray[b].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 100) { // Если частицы близко (например меньше 100 пикселей)
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(0, 255, 136, 0.1)'; // Тонкие полупрозрачные линии
+          ctx.lineWidth = 1;
+          ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+          ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particlesArray.forEach(p => {
       p.x += p.speedX;
       p.y += p.speedY;
 
       if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
       if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
     });
+
+    drawParticles();
+    connectParticles();
+
     requestAnimationFrame(animateParticles);
   }
 
@@ -281,7 +309,7 @@
     }
     bass /= 10;
 
-    const bassFactor = Math.max(1, bass / 30); // Было bass/50 — теперь bass/30 для усиления эффекта пульсации
+    const bassFactor = Math.max(1, bass / 30);
 
     particlesArray.forEach(p => {
       p.size = p.baseSize * bassFactor;
@@ -304,6 +332,7 @@
 
   window.addEventListener('resize', resizeCanvas);
 </script>
+
 
 </body>
 </html>
