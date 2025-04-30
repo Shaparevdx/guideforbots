@@ -2,85 +2,112 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Как установить TLauncher 🎮</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Установка TLauncher 🎮</title>
+  
   <style>
     body {
-      background-color: #111;
-      color: #eee;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
       margin: 0;
       padding: 0;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      color: white;
       overflow-x: hidden;
-    }
-    .wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      gap: 20px;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .video {
-      flex: 1;
-      height: 90vh;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 20px;
-    }
-    .content {
-      flex: 2;
-      background-color: #222;
-      padding: 20px;
-      border-radius: 20px;
       text-align: center;
-      box-shadow: 0 0 20px lime;
-      overflow-y: auto;
-      max-height: 90vh;
     }
+
+    /* СТИЛИ ДЛЯ ВИДЕО */
+    .video video, .video iframe {
+      width: 100%;
+      height: auto;
+      max-width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(255,255,255,0.5);
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .video:hover video, .video:hover iframe {
+      transform: scale(1.05);
+    }
+
+    /* СТИЛИ КОНТЕЙНЕРА */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 40px 20px;
+    }
+
+    /* АНИМАЦИИ */
+    .animate {
+      opacity: 0;
+      transform: scale(0.8);
+      animation: fadeInZoom 1s ease-out forwards;
+    }
+
+    .animate-delay-1 { animation-delay: 0.3s; }
+    .animate-delay-2 { animation-delay: 0.6s; }
+    .animate-delay-3 { animation-delay: 0.9s; }
+
+    @keyframes fadeInZoom {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ТЕКСТ ПРИ НАВЕДЕНИИ */
+    .text-block:hover {
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700, 0 0 20px #ff6b6b;
+      transform: scale(1.02);
+      transition: all 0.3s ease;
+    }
+
     h1 {
-      font-size: 2em;
-      margin-bottom: 1em;
+      font-size: 2.5em;
+      margin-bottom: 20px;
     }
+
     p {
       font-size: 1.2em;
-      margin: 1em 0;
+      margin-bottom: 15px;
     }
-    a {
-      color: #0f0;
-      text-decoration: none;
-    }
+
   </style>
 </head>
+
 <body>
 
-<div class="wrapper">
-  <div class="video">
-    <iframe src="https://www.youtube.com/embed/6DNvO4oh8n4?autoplay=1&loop=1&playlist=6DNvO4oh8n4" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>
-  </div>
+  <div class="container">
+    <!-- Subway Surf Видео -->
+    <div class="video animate animate-delay-1">
+      <iframe width="300" height="533" src="https://www.youtube.com/embed/Kq1PD-NfidQ?autoplay=1&mute=1&loop=1&playlist=ТВОЙ_ID_SUBWAY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
 
-  <div class="content">
-    <h1>Как скачать и установить TLauncher 🎮🔥</h1>
-    <p>✅ 1. Перейди на сайт 👉 <a href="https://tlauncher.org/ru/" target="_blank">tlauncher.org</a> 🌐</p>
-    <p>✅ 2. Нажми на кнопку \"Скачать TLauncher\" 🚀</p>
-    <p>✅ 3. Выбери свою операционную систему (Windows, MacOS, Linux) 💻📱</p>
-    <p>✅ 4. Установи лаунчер, запустив скачанный файл ⚙️🛠️</p>
-    <p>✅ 5. При установке поставь галочку ✅ на \"Полная установка\"</p>
-    <p>✅ 6. Запусти TLauncher 🎮✨</p>
-    <p>✅ 7. В настройках выбери версию <b>Vanilla 1.21.5</b> 🧱🌟</p>
-    <p>✅ 8. Обязательно зайди на сервер 🌐 IP: <b>kaznos.mclan.ru</b> или <b>kaznos.sosal.today</b> 💀🕸️</p>
-    <p>✅ 9. И наслаждайся игрой!!! 🎉🔥💀⚡</p>
-  </div>
+    <!-- Основной текст -->
+    <div class="text-block animate animate-delay-2" style="max-width: 600px;">
+      <h1>🎮 Добро пожаловать в мир Minecraft! 🎮</h1>
+      <p>⚡ Скачай и установи <strong>TLauncher</strong> легко и быстро!</p>
+      <p>🌎 Залетай к нам на сервер: <strong>kaznos.mclan.ru</strong> или <strong>kaznos.sosal.today</strong>!</p>
+      <p>💎 Обязательно выбери версию: <strong>Vanilla 1.21.5</strong>!</p>
+      <p>🚀 Погнали играть вместе! 🎉</p>
+    </div>
 
-  <div class="video">
-    <iframe src="https://www.youtube.com/embed/Kq1PD-NfidQ?autoplay=1&mute=1&loop=1&playlist=Kq1PD-NfidQ" allowfullscreen></iframe>
+    <!-- Роналду Видео -->
+    <div class="video animate animate-delay-3">
+      <video autoplay loop controls>
+        <source src="ronaldo.mp4" type="video/mp4">
+        Твой браузер не поддерживает видео :(
+      </video>
+    </div>
   </div>
-</div>
 
 </body>
 </html>
