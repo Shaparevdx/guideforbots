@@ -188,7 +188,6 @@
 
   let particlesArray = [];
   let audioContext, analyser, source, dataArray;
-  let hueShift = 120; // начальный цветовой тон (зеленоватый)
 
   function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -196,14 +195,31 @@
   }
 
   function initParticles() {
-    particlesArray = Array.from({ length: 100 }, () => ({
+    particlesArray = Array.from({ length: 120 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       baseSize: Math.random() * 3 + 1,
       size: 1,
-      speedX: (Math.random() - 0.5) * 1.5,
-      speedY: (Math.random() - 0.5) * 1.5
+      speedX: (Math.random() - 0.5) * 2.5, // Чуть быстрее (было *2, стало *2.5)
+      speedY: (Math.random() - 0.5) * 2.5
     }));
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particlesArray.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = '#00ff88';
+      ctx.fill();
+
+      p.x += p.speedX;
+      p.y += p.speedY;
+
+      if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
+      if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
+    });
+    requestAnimationFrame(animateParticles);
   }
 
   async function fetchPlayerCount() {
@@ -253,41 +269,26 @@
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
-    animate(); // запустить основной цикл анимации
+    animateWithBass();
   }
 
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function animateWithBass() {
+    analyser.getByteFrequencyData(dataArray);
 
-    if (analyser) {
-      analyser.getByteFrequencyData(dataArray);
-
-      let bass = 0;
-      for (let i = 0; i < 10; i++) {
-        bass += dataArray[i];
-      }
-      bass /= 10;
-
-      const bassFactor = Math.max(1, bass / 50);
-      hueShift = (hueShift + bass / 100) % 360; // меняем цвет в зависимости от баса
-
-      particlesArray.forEach(p => {
-        p.size = p.baseSize * bassFactor;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsl(${hueShift}, 100%, 60%)`;
-        ctx.fill();
-
-        p.x += p.speedX;
-        p.y += p.speedY;
-
-        if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
-        if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
-      });
+    let bass = 0;
+    for (let i = 0; i < 10; i++) {
+      bass += dataArray[i];
     }
+    bass /= 10;
 
-    requestAnimationFrame(animate);
+    const bassFactor = Math.max(1, bass / 30); // Было bass/50 — теперь bass/30 для усиления эффекта пульсации
+
+    particlesArray.forEach(p => {
+      p.size = p.baseSize * bassFactor;
+    });
+
+    animateParticles();
+    requestAnimationFrame(animateWithBass);
   }
 
   startButton.addEventListener('click', () => {
