@@ -196,7 +196,7 @@
   }
 
   function initParticles() {
-    particlesArray = Array.from({ length: 70 }, () => ({
+    particlesArray = Array.from({ length: 85 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       baseSize: Math.random() * 3 + 1,
@@ -293,7 +293,7 @@
     hueShift = (hueShift + bass / 100) % 360;
 
     particlesArray.forEach(p => {
-      p.size = p.baseSize * (1 + bassFactor * 3);
+      p.size = p.baseSize * (0.5 + bassFactor * 2);
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
