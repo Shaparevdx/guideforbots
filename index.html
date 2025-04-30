@@ -207,18 +207,27 @@
   }
 
   async function fetchPlayerCount() {
-    try {
-      const response = await fetch('https://api.mcsrvstat.us/2/kaznos.mclan.ru');
+  try {
+    const urls = [
+      'https://api.mcsrvstat.us/2/kaznos.mclan.ru',
+      'https://api.mcsrvstat.us/2/kaznos.sosal.today'
+    ];
+
+    let totalPlayers = 0;
+
+    for (const url of urls) {
+      const response = await fetch(url);
       const data = await response.json();
-      if (data && data.players) {
-        playerCountElement.textContent = `Игроков онлайн: ${data.players.online} 🔥`;
-      } else {
-        playerCountElement.textContent = 'Игроков онлайн: 0 😢';
+      if (data && data.players && typeof data.players.online === 'number') {
+        totalPlayers += data.players.online;
       }
-    } catch (error) {
-      playerCountElement.textContent = 'Ошибка загрузки онлайн 😵';
     }
+
+    playerCountElement.textContent = `Игроков онлайн: ${totalPlayers} 🔥`;
+  } catch (error) {
+    playerCountElement.textContent = 'Ошибка загрузки онлайн 😵';
   }
+}
 
   function fadeInContent() {
     mainContent.style.visibility = 'visible';
