@@ -188,6 +188,7 @@
 
   let particlesArray = [];
   let audioContext, analyser, source, dataArray;
+  let hueShift = 120; // начальный цветовой тон (зеленоватый)
 
   function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -195,59 +196,14 @@
   }
 
   function initParticles() {
-    particlesArray = Array.from({ length: 120 }, () => ({
+    particlesArray = Array.from({ length: 100 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       baseSize: Math.random() * 3 + 1,
       size: 1,
-      speedX: (Math.random() - 0.5) * 2.5,
-      speedY: (Math.random() - 0.5) * 2.5
+      speedX: (Math.random() - 0.5) * 1.5,
+      speedY: (Math.random() - 0.5) * 1.5
     }));
-  }
-
-  function drawParticles() {
-    particlesArray.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = '#00ff88';
-      ctx.fill();
-    });
-  }
-
-  function connectParticles() {
-    for (let a = 0; a < particlesArray.length; a++) {
-      for (let b = a + 1; b < particlesArray.length; b++) {
-        const dx = particlesArray[a].x - particlesArray[b].x;
-        const dy = particlesArray[a].y - particlesArray[b].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 100) { // Если частицы близко (например меньше 100 пикселей)
-          ctx.beginPath();
-          ctx.strokeStyle = 'rgba(0, 255, 136, 0.1)'; // Тонкие полупрозрачные линии
-          ctx.lineWidth = 1;
-          ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-          ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-          ctx.stroke();
-        }
-      }
-    }
-  }
-
-  function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    particlesArray.forEach(p => {
-      p.x += p.speedX;
-      p.y += p.speedY;
-
-      if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
-      if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
-    });
-
-    drawParticles();
-    connectParticles();
-
-    requestAnimationFrame(animateParticles);
   }
 
   async function fetchPlayerCount() {
@@ -297,26 +253,41 @@
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
-    animateWithBass();
+    animate(); // запустить основной цикл анимации
   }
 
-  function animateWithBass() {
-    analyser.getByteFrequencyData(dataArray);
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    let bass = 0;
-    for (let i = 0; i < 10; i++) {
-      bass += dataArray[i];
+    if (analyser) {
+      analyser.getByteFrequencyData(dataArray);
+
+      let bass = 0;
+      for (let i = 0; i < 10; i++) {
+        bass += dataArray[i];
+      }
+      bass /= 10;
+
+      const bassFactor = Math.max(1, bass / 50);
+      hueShift = (hueShift + bass / 100) % 360; // меняем цвет в зависимости от баса
+
+      particlesArray.forEach(p => {
+        p.size = p.baseSize * bassFactor;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsl(${hueShift}, 100%, 60%)`;
+        ctx.fill();
+
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
+        if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
+      });
     }
-    bass /= 10;
 
-    const bassFactor = Math.max(1, bass / 30);
-
-    particlesArray.forEach(p => {
-      p.size = p.baseSize * bassFactor;
-    });
-
-    animateParticles();
-    requestAnimationFrame(animateWithBass);
+    requestAnimationFrame(animate);
   }
 
   startButton.addEventListener('click', () => {
@@ -332,6 +303,7 @@
 
   window.addEventListener('resize', resizeCanvas);
 </script>
+
 
 
 </body>
