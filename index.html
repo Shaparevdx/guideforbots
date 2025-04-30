@@ -6,23 +6,140 @@
   <title>Kaznos MC⛏️</title>
   <link rel="icon" href="https://i.pinimg.com/736x/41/ec/51/41ec519450f2d6eab830e86b97cd7d69.jpg">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body, html { width: 100%; height: 100%; font-family: 'Comic Sans MS', cursive, sans-serif; background: #0c0c0c; color: #fff; overflow: hidden; position: relative; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0c0c0c; z-index: 1000; display: flex; justify-content: center; align-items: center; }
-    .overlay-btn { padding: 20px 40px; background: linear-gradient(45deg, #00ff88, #00c3ff); border: none; border-radius: 30px; font-size: 2em; font-weight: bold; color: #000; cursor: pointer; animation: pulse 2s infinite; }
-    .container { display: flex; width: 100%; height: 100vh; position: relative; z-index: 1; visibility: hidden; opacity: 0; transition: opacity 2s ease; }
-    .video-side { width: 25%; height: 100%; overflow: hidden; position: relative; }
-    .video-side iframe { position: absolute; top: 50%; left: 50%; width: 120%; height: 120%; transform: translate(-50%, -50%); pointer-events: none; }
-    .center-content { width: 50%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; opacity: 0; transform: translateY(50px); transition: opacity 2s ease, transform 2s ease; }
-    h1 { font-size: 3em; margin-bottom: 20px; animation: fadeInDown 1s ease; }
-    p { font-size: 1.5em; margin: 10px 0; }
-    .server-address { background: linear-gradient(45deg, #00ff88, #00c3ff); color: #000; padding: 10px 20px; margin: 10px 5px; border-radius: 30px; font-weight: bold; display: inline-block; font-size: 1.3em; }
-    .download-btn { margin-top: 20px; padding: 15px 30px; background: linear-gradient(45deg, #ffcc00, #ff6600); border: none; border-radius: 50px; font-size: 1.5em; font-weight: bold; color: #000; cursor: pointer; animation: pulse 2s infinite; }
-    @keyframes fadeInDown { from {opacity: 0; transform: translateY(-50px);} to {opacity: 1; transform: translateY(0);} }
-    @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
-    #player-count { margin-top: 20px; font-size: 1.5em; color: #00ff88; font-weight: bold; }
-    canvas#particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-    audio { display: none; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #0c0c0c;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0c0c0c;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay-btn {
+      padding: 20px 40px;
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      border: none;
+      border-radius: 30px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      z-index: 1;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+   .video-side {
+    width: 25%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    }
+
+    .video-side iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    }
+    .center-content {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 2s ease, transform 2s ease;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      animation: fadeInDown 1s ease;
+    }
+    p {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    .server-address {
+      background: linear-gradient(45deg, #00ff88, #00c3ff);
+      color: #000;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border-radius: 30px;
+      font-weight: bold;
+      display: inline-block;
+      font-size: 1.3em;
+    }
+    .download-btn {
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #ffcc00, #ff6600);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    @keyframes fadeInDown {
+      from {opacity: 0; transform: translateY(-50px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes pulse {
+      0% {transform: scale(1);}
+      50% {transform: scale(1.1);}
+      100% {transform: scale(1);}
+    }
+    #player-count {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #00ff88;
+      font-weight: bold;
+    }
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    audio {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -60,108 +177,126 @@
 </div>
 
 <script>
-const audio = document.getElementById('background-audio');
-audio.volume = 0.5;
+  const audio = document.getElementById('background-audio');
+  audio.volume = 0.5;
 
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let particlesArray = [];
+  let audioCtx, analyser, source, dataArray;
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+  document.getElementById('startButton').addEventListener('click', async function() {
+    document.getElementById('overlay').style.display = 'none';
+    const content = document.getElementById('mainContent');
+    const text = document.getElementById('textContent');
 
-function initParticles() {
-  particlesArray = [];
-  const numberOfParticles = 120;
-  for (let i = 0; i < numberOfParticles; i++) {
-    particlesArray.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      baseSize: Math.random() * 3 + 1,
-      size: 0,
-      speedX: (Math.random() - 0.5) * 2,
-      speedY: (Math.random() - 0.5) * 2
-    });
+    content.style.visibility = 'visible';
+    setTimeout(() => {
+      content.style.opacity = 1;
+      text.style.opacity = 1;
+      text.style.transform = 'translateY(0)';
+    }, 100);
+
+    // Плавное увеличение громкости
+    audio.volume = 0;
+    audio.play();
+    let vol = 0;
+    const interval = setInterval(() => {
+      if (vol < 0.5) {
+        vol += 0.01;
+        audio.volume = Math.min(vol, 0.5);
+      } else {
+        clearInterval(interval);
+      }
+    }, 200);
+
+    // Создание аудио анализатора
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    source = audioCtx.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    dataArray = new Uint8Array(bufferLength);
+  });
+
+  // Анимация частиц
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particlesArray = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-}
 
-let audioContext, analyser, sourceNode, dataArray;
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-async function setupAudioProcessing() {
-  audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = audioContext.createAnalyser();
-  analyser.fftSize = 256;
-  const bufferLength = analyser.frequencyBinCount;
-  dataArray = new Uint8Array(bufferLength);
-
-  sourceNode = audioContext.createMediaElementSource(audio);
-  sourceNode.connect(analyser);
-  analyser.connect(audioContext.destination);
-}
-
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (analyser) analyser.getByteFrequencyData(dataArray);
-  let bass = 0;
-  if (dataArray) {
-    for (let i = 0; i < 10; i++) { bass += dataArray[i]; }
-    bass = bass / 10;
-  }
-
-  for (let i = 0; i < particlesArray.length; i++) {
-    const p = particlesArray[i];
-    let dynamicSize = p.baseSize + (bass / 50);
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, dynamicSize, 0, Math.PI * 2);
-    ctx.fillStyle = '#00ff88';
-    ctx.fill();
-    p.x += p.speedX;
-    p.y += p.speedY;
-    if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
-    if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
-  }
-  requestAnimationFrame(animateParticles);
-}
-
-initParticles();
-animateParticles();
-
-// UI logic
-
-document.getElementById('startButton').addEventListener('click', async function() {
-  document.getElementById('overlay').style.display = 'none';
-  const content = document.getElementById('mainContent');
-  const text = document.getElementById('textContent');
-  content.style.visibility = 'visible';
-  setTimeout(() => {
-    content.style.opacity = 1;
-    text.style.opacity = 1;
-    text.style.transform = 'translateY(0)';
-  }, 100);
-  await setupAudioProcessing();
-  audio.play();
-});
-
-// Player count
-async function fetchPlayerCount() {
-  try {
-    const response = await fetch('https://api.mcsrvstat.us/2/kaznos.mclan.ru');
-    const data = await response.json();
-    if (data && data.players) {
-      document.getElementById('player-count').innerText = `Игроков онлайн: ${data.players.online} 🔥`;
-    } else {
-      document.getElementById('player-count').innerText = 'Игроков онлайн: 0 😢';
+  function initParticles() {
+    particlesArray = [];
+    const numberOfParticles = 120;
+    for (let i = 0; i < numberOfParticles; i++) {
+      particlesArray.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        baseSize: 0,
+        speedX: (Math.random() - 0.5) * 2,
+        speedY: (Math.random() - 0.5) * 2
+      });
     }
-  } catch (e) {
-    document.getElementById('player-count').innerText = 'Ошибка загрузки онлайн 😵';
   }
-}
-setInterval(fetchPlayerCount, 5000);
-fetchPlayerCount();
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let bassBoost = 1;
+    if (analyser) {
+      analyser.getByteFrequencyData(dataArray);
+      // Усредняем низкие частоты (первые 10 частотных диапазонов)
+      let bass = 0;
+      for (let i = 0; i < 10; i++) {
+        bass += dataArray[i];
+      }
+      bass = bass / 10;
+      bassBoost = 1 + bass / 150; // регулировка силы "бафания"
+    }
+
+    for (let i = 0; i < particlesArray.length; i++) {
+      const p = particlesArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * bassBoost, 0, Math.PI * 2);
+      ctx.fillStyle = '#00ff88';
+      ctx.fill();
+      p.x += p.speedX;
+      p.y += p.speedY;
+
+      if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
+      if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
+    }
+
+    requestAnimationFrame(animateParticles);
+  }
+
+  initParticles();
+  animateParticles();
+
+  // Счётчик игроков
+  async function fetchPlayerCount() {
+    try {
+      const response = await fetch('https://api.mcsrvstat.us/2/kaznos.mclan.ru');
+      const data = await response.json();
+      if (data && data.players) {
+        document.getElementById('player-count').innerText = `Игроков онлайн: ${data.players.online} 🔥`;
+      } else {
+        document.getElementById('player-count').innerText = 'Игроков онлайн: 0 😢';
+      }
+    } catch (e) {
+      document.getElementById('player-count').innerText = 'Ошибка загрузки онлайн 😵';
+    }
+  }
+
+  setInterval(fetchPlayerCount, 5000);
+  fetchPlayerCount();
 </script>
 
 </body>
