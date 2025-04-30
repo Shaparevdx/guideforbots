@@ -261,19 +261,16 @@
     overlay.style.display = 'none';
     fadeInContent();
     graduallyIncreaseVolume();
+    resizeCanvas();
+    initParticles();
+    animateParticles();
+    fetchPlayerCount();
+    setInterval(fetchPlayerCount, 5000);
   });
 
-  window.addEventListener('resize', resizeCanvas);
-
-  // Initialization
-  resizeCanvas();
-  initParticles();
-  animateParticles();
-  fetchPlayerCount();
-  setInterval(fetchPlayerCount, 5000);
-
-  // Set initial audio volume
-  audio.volume = 0.5;
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+  });
 </script>
 
 </body>
