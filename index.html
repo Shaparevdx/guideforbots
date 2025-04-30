@@ -253,7 +253,26 @@
     const bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
 
-    animate(); // запустить основной цикл анимации
+    animate();
+  }
+
+  function connectParticles() {
+    for (let a = 0; a < particlesArray.length; a++) {
+      for (let b = a + 1; b < particlesArray.length; b++) {
+        const dx = particlesArray[a].x - particlesArray[b].x;
+        const dy = particlesArray[a].y - particlesArray[b].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 100) { // радиус соединения
+          ctx.beginPath();
+          ctx.strokeStyle = `hsla(${hueShift}, 100%, 60%, ${1 - distance / 100})`; // прозрачность зависит от расстояния
+          ctx.lineWidth = 1;
+          ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+          ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+          ctx.stroke();
+        }
+      }
+    }
   }
 
   function animate() {
@@ -269,7 +288,7 @@
       bass /= 10;
 
       const bassFactor = Math.max(1, bass / 50);
-      hueShift = (hueShift + bass / 100) % 360; // меняем цвет в зависимости от баса
+      hueShift = (hueShift + bass / 100) % 360;
 
       particlesArray.forEach(p => {
         p.size = p.baseSize * bassFactor;
@@ -285,6 +304,8 @@
         if (p.x <= 0 || p.x >= canvas.width) p.speedX *= -1;
         if (p.y <= 0 || p.y >= canvas.height) p.speedY *= -1;
       });
+
+      connectParticles(); // <-- вызываем отрисовку паутинки после частиц
     }
 
     requestAnimationFrame(animate);
@@ -303,6 +324,7 @@
 
   window.addEventListener('resize', resizeCanvas);
 </script>
+
 
 
 
