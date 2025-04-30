@@ -293,7 +293,7 @@
     hueShift = (hueShift + bass / 100) % 360;
 
     particlesArray.forEach(p => {
-      p.size = p.baseSize * (0.5 + bassFactor * 2);
+      p.size = Math.max(1, p.baseSize * (0.5 + bassFactor * 2.5));
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
