@@ -287,11 +287,11 @@
       }
       bass /= 10;
 
-      const bassFactor = Math.max(1, bass / 30);
+      const bassFactor = Math.max(0.8, bass / 30);
       hueShift = (hueShift + bass / 100) % 360;
 
       particlesArray.forEach(p => {
-        p.size = p.baseSize * bassFactor;
+        p.size = p.baseSize * (1 + bassFactor * 3);
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
