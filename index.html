@@ -1,137 +1,187 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+<head>
   <meta charset="UTF-8" />
-  <title>KAZNOS Minecraft</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com "></script>
+  <title>Kaznos Server</title>
 
-  <!-- Babel для обработки JSX -->
-  <script src="https://unpkg.com/ @babel/standalone/babel.min.js"></script>
-
-  <!-- React и ReactDOM -->
-  <script src="https://unpkg.com/react @18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom @18/umd/react-dom.development.js" crossorigin></script>
-
+  <!-- Стили -->
   <style>
-    .text-shadow-md {
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    body {
+      background-color: #000;
+      color: #2ecc71; /* Зелёный текст */
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      background-image: url('/animated_menu.gif'); /* Убедитесь, что animated_menu.gif находится в корне */
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    h1 {
+      font-size: 2em;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    p {
+      font-size: 1.2em;
+      text-align: center;
+      margin: 10px 0;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .server-info {
+      font-size: 1.1em;
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .online-count {
+      font-size: 1.2em;
+      font-weight: bold;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .download-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .download-button {
+      background-color: #f1c40f; /* Оранжевый фон */
+      color: #2c3e50; /* Тёмно-синий текст */
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .download-button:hover {
+      background-color: #e67e22; /* Темнее оранжевый при наведении */
+    }
+
+    .guide-section {
+      background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный чёрный фон */
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      color: #ecf0f1; /* Светло-серый текст */
+    }
+
+    .guide-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .guide-list {
+      list-style-type: decimal;
+      padding-left: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { border-right-color: transparent; }
+      50% { border-right-color: #2ecc71; }
+    }
+
+    .cursor {
+      display: inline-block;
+      animation: blinkCursor 1s infinite;
+      border-right: 2px solid #2ecc71;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body>
+  <!-- Заголовок -->
+  <h1>Добро пожаловать на Kaznos Server! ⛏️</h1>
 
-  <div id="root"></div>
+  <!-- Информация о версии -->
+  <p>Установи версию: <strong>Vanilla 1.21.5</strong> ✅</p>
 
-  <!-- Ваш React-код здесь -->
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+  <!-- Информация о сервере -->
+  <div class="server-info">
+    Заходи на наш сервер:<br />
+    <a href="https://kaznos.mclan.ru " target="_blank" rel="noopener noreferrer">kaznos.mclan.ru</a><br />
+    <a href="https://kaznos.sosal.today " target="_blank" rel="noopener noreferrer">kaznos.sosal.today</a>
+  </div>
 
-    // Иконки
-    const DownloadIcon = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-        <path d="M19 13v10H5v-10h14m0-3H5v-2h14v2z" />
-      </svg>
-    );
+  <!-- Онлайн игроков -->
+  <div class="online-count">
+    Игроков онлайн:
+    <span id="playerCount">Загрузка... <span class="cursor">_</span></span>
+  </div>
 
-    const GuideIcon = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-        <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
-      </svg>
-    );
+  <!-- Кнопки скачивания -->
+  <div class="download-buttons">
+    <a href="https://drive.google.com/file/d/1_Bax8Kw3u8lmyaDf-1dJ6KS3TkXN96ux/view?usp=sharing" target="_blank" class="download-button">
+      Скачать AstralRinth
+    </a>
+    <a href=" https://drive.google.com/file/d/1f8RNDsfWDGalx3bU6S3dRsvoTOIBGZ1J/view?usp=sharing" target="_blank" class="download-button">
+      Скачать модпак
+    </a>
+  </div>
 
-    function App() {
-      const [onlinePlayers, setOnlinePlayers] = useState(0);
+  <!-- Гайд по установке -->
+  <div class="guide-section">
+    <h2 class="guide-title">Гайд по установке</h2>
+    <ol class="guide-list">
+      <li>Откройте AstralRinth.</li>
+      <li>Слева нажмите на кнопку +</li>
+      <li>
+        В открывшемся окне выбрать "From file" и нажать "Import from file"
+      </li>
+      <li>
+        Выберите скачанный файл .mrpack и подтвердите импорт.
+      </li>
+      <li>
+        Дождитесь импорта модпака. Прогресс можно отслеживать в верхнем баре на кнопке "загрузки"
+      </li>
+      <li>Запустите модпак и заходите на сервер!</li>
+    </ol>
+  </div>
 
-      useEffect(() => {
-        async function fetchOnlinePlayers() {
-          try {
-            const res = await fetch("https://api.mcsrvstat.us/2/kaznos.skuf.club ");
-            const data = await res.json();
-            setOnlinePlayers(data.players?.online || 0);
-          } catch (e) {
-            console.error("Ошибка получения онлайна:", e);
+  <!-- Скрипт для получения онлайна -->
+  <script>
+    // Функция для получения онлайна с сервера
+    function fetchOnlinePlayers() {
+      fetch(" https://api.mcsrvstat.us/2/kaznos.mclan.ru ")
+        .then(response => response.json())
+        .then(data => {
+          const playerCountElement = document.getElementById("playerCount");
+          if (data.players && data.players.online !== undefined) {
+            playerCountElement.textContent = data.players.online;
+            playerCountElement.classList.remove("cursor"); // Убираем мигающий курсор
+          } else {
+            playerCountElement.textContent = "Ошибка при получении данных";
           }
-        }
-
-        fetchOnlinePlayers();
-        const interval = setInterval(fetchOnlinePlayers, 60000);
-        return () => clearInterval(interval);
-      }, []);
-
-      return (
-        React.createElement('div', {
-          className: 'relative flex flex-col items-center justify-center min-h-screen bg-cover bg-center',
-          style: { backgroundImage: "url('animated_menu.gif')" }
-        },
-          // Header
-          React.createElement('div', { className: 'absolute top-0 w-full text-center text-shadow-md' },
-            React.createElement('h1', { className: 'text-5xl font-bold text-white text-shadow-lg' }, 'KAZNOS'),
-            React.createElement('p', { className: 'text-xl font-semibold text-orange-500' }, 'ALLTHEMODS 1.0 EDITION'),
-            React.createElement('p', { className: 'text-xl font-bold text-gray-400' }, 'MINECRAFT 1.21.1')
-          ),
-
-          // Buttons and guide
-          React.createElement('div', { className: 'flex flex-col items-center justify-center mt-20 space-y-8' },
-            React.createElement('div', { className: 'flex flex-col space-y-4' },
-              React.createElement('a', {
-                href: 'https://drive.google.com/file/d/1_Bax8Kw3u8lmyaDf-1dJ6KS3TkXN96ux/view?usp=sharing',
-                target: '_blank',
-                rel: 'noopener noreferrer',
-                className: 'bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out flex items-center space-x-2'
-              },
-                React.createElement(DownloadIcon, null),
-                React.createElement('span', null, 'Скачать AstralRinth')
-              ),
-              React.createElement('a', {
-                href: ' https://drive.google.com/file/d/1f8RNDsfWDGalx3bU6S3dRsvoTOIBGZ1J/view?usp=sharing',
-                target: '_blank',
-                rel: 'noopener noreferrer',
-                className: 'bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out flex items-center space-x-2'
-              },
-                React.createElement(DownloadIcon, null),
-                React.createElement('span', null, 'Скачать модпак')
-              )
-            ),
-
-            React.createElement('div', { className: 'bg-gray-800 bg-opacity-75 p-6 rounded-lg shadow-lg text-white text-center' },
-              React.createElement('h2', { className: 'text-2xl font-bold mb-4 flex items-center justify-center space-x-2' },
-                React.createElement(GuideIcon, null),
-                React.createElement('span', null, 'Гайд по установке')
-              ),
-              React.createElement('ol', { className: 'list-decimal list-inside text-lg space-y-2' },
-                React.createElement('li', null, 'Откройте AstralRinth.'),
-                React.createElement('li', null, 'Слева нажмите на кнопку +'),
-                React.createElement('li', null, 'В открывшемся окне выбрать "From file" и нажать "Import from file"'),
-                React.createElement('li', null, 'Выберите скачанный файл .mrpack и подтвердите импорт.'),
-                React.createElement('li', null, 'Дождитесь импорта модпака. Прогресс можно отслеживать в верхнем баре на кнопке "загрузки"'),
-                React.createElement('li', null, 'Запустите модпак и заходите на сервер!')
-              )
-            )
-          ),
-
-          // Footer
-          React.createElement('footer', { className: 'absolute bottom-0 w-full p-4 bg-gray-800 bg-opacity-75 text-white text-center text-shadow-md' },
-            React.createElement('p', null,
-              'Игроков онлайн: ',
-              React.createElement('strong', null, onlinePlayers),
-              ' на сервере ',
-              React.createElement('a', {
-                href: ' https://kaznos.skuf.club ',
-                target: '_blank',
-                rel: 'noopener noreferrer',
-                className: 'text-yellow-500 hover:text-yellow-600'
-              }, 'kaznos.skuf.club')
-            )
-          )
-        )
-      );
+        })
+        .catch(error => {
+          console.error("Ошибка получения онлайна:", error);
+          const playerCountElement = document.getElementById("playerCount");
+          playerCountElement.textContent = "Ошибка при получении данных";
+        });
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(React.createElement(App));
+    // Обновляем онлайнеры каждые 30 секунд
+    setInterval(fetchOnlinePlayers, 30000);
+
+    // Первый запуск
+    fetchOnlinePlayers();
   </script>
 </body>
 </html>
