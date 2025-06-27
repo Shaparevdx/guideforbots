@@ -25,7 +25,7 @@
     }
 
     .main-container {
-      background-color: rgba(255, 255, 255, 0.35); /* Полупрозрачный белый фон */
+      background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачный белый фон */
       padding: 30px;
       border-radius: 10px;
       text-align: center;
@@ -66,7 +66,7 @@
     }
 
     .guide-section {
-      background-color: rgba(255, 255, 255, 0.35); /* Полупрозрачный белый фон */
+      background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачный белый фон */
       padding: 20px;
       border-radius: 10px;
       margin: 0 auto 30px auto;
@@ -87,14 +87,6 @@
       list-style-type: decimal;
       padding-left: 20px;
       color: #ecf0f1;
-    }
-
-    .online-count {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-top: 10px;
-      animation: fadeIn 2s ease-in-out;
-      color: #ffffff;
     }
 
     @keyframes fadeIn {
@@ -118,18 +110,13 @@
 
   <!-- Основной контейнер с заголовком и кнопками -->
   <div class="main-container">
-    <h1>Добро пожаловать на Kaznos Server! ⛏️</h1>
-
-    <!-- Онлайн игроков -->
-    <div class="online-count">
-      Игроков онлайн:
-      <span id="playerCount">Загрузка... <span class="cursor">_</span></span>
-    </div>
-
+    <h1>Добро пожаловать на Minecraft 1.21.1 Kaznos Server! </h1>
+    
     <!-- Кнопки скачивания -->
     <div class="download-buttons">
       <a href="https://drive.google.com/file/d/1_Bax8Kw3u8lmyaDf-1dJ6KS3TkXN96ux/view?usp=sharing" target="_blank" class="download-button">
-        Скачать AstralRinth
+        Скачать лаунчер 
+        AstralRinth
       </a>
       <a href=" https://drive.google.com/file/d/1f8RNDsfWDGalx3bU6S3dRsvoTOIBGZ1J/view?usp=sharing" target="_blank" class="download-button">
         Скачать модпак
@@ -156,33 +143,5 @@
     </ol>
   </div>
 
-  <!-- Скрипт для получения онлайна -->
-  <script>
-    // Функция для получения онлайна с сервера
-    function fetchOnlinePlayers() {
-      fetch(" https://api.mcsrvstat.us/2/kaznos.mclan.ru ")
-        .then(response => response.json())
-        .then(data => {
-          const playerCountElement = document.getElementById("playerCount");
-          if (data.players && data.players.online !== undefined) {
-            playerCountElement.textContent = data.players.online;
-            playerCountElement.classList.remove("cursor"); // Убираем мигающий курсор
-          } else {
-            playerCountElement.textContent = "Ошибка при получении данных";
-          }
-        })
-        .catch(error => {
-          console.error("Ошибка получения онлайна:", error);
-          const playerCountElement = document.getElementById("playerCount");
-          playerCountElement.textContent = "Ошибка при получении данных";
-        });
-    }
-
-    // Обновляем онлайнеры каждые 30 секунд
-    setInterval(fetchOnlinePlayers, 30000);
-
-    // Первый запуск
-    fetchOnlinePlayers();
-  </script>
 </body>
 </html>
