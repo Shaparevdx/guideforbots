@@ -19,42 +19,34 @@
       justify-content: center;
       height: 100vh;
       overflow: hidden;
-      background-image: url('animated_menu.gif'); /* Убедитесь, что animated_menu.gif находится в корне */
+      background-image: url('/animated_menu.gif'); /* Убедитесь, что animated_menu.gif находится в корне */
       background-size: cover;
       background-repeat: no-repeat;
     }
 
+    .main-container {
+      background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный белый фон */
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      max-width: 400px;
+      width: 90%;
+      margin-bottom: 30px;
+    }
+
     h1 {
       font-size: 2em;
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    p {
-      font-size: 1.2em;
-      text-align: center;
-      margin: 10px 0;
-      animation: fadeIn 1.5s ease-in-out;
-    }
-
-    .server-info {
-      font-size: 1.1em;
-      text-align: center;
-      margin-top: 20px;
-      line-height: 1.6;
-    }
-
-    .online-count {
-      font-size: 1.2em;
-      font-weight: bold;
-      animation: fadeIn 2s ease-in-out;
+      margin: 0 0 20px 0;
+      color: #ffffff;
     }
 
     .download-buttons {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 30px;
+      margin-top: 20px;
     }
 
     .download-button {
@@ -65,6 +57,8 @@
       font-size: 1em;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
     .download-button:hover {
@@ -72,21 +66,35 @@
     }
 
     .guide-section {
-      background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный чёрный фон */
+      background-color: rgba(255, 255, 255, 0.1); /* Полупрозрачный белый фон */
       padding: 20px;
-      border-radius: 8px;
-      margin-top: 30px;
-      color: #ecf0f1; /* Светло-серый текст */
+      border-radius: 10px;
+      margin: 0 auto 30px auto;
+      max-width: 600px;
+      width: 90%;
+      color: #ecf0f1;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
     }
 
     .guide-title {
       font-size: 1.5em;
       margin-bottom: 10px;
+      color: #ffffff;
     }
 
     .guide-list {
       list-style-type: decimal;
       padding-left: 20px;
+      color: #ecf0f1;
+    }
+
+    .online-count {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 10px;
+      animation: fadeIn 2s ease-in-out;
+      color: #ffffff;
     }
 
     @keyframes fadeIn {
@@ -107,33 +115,26 @@
   </style>
 </head>
 <body>
-  <!-- Заголовок -->
-  <h1>Добро пожаловать на Kaznos Server! ⛏️</h1>
 
-  <!-- Информация о версии -->
-  <p>Установи версию: <strong>Vanilla 1.21.5</strong> ✅</p>
+  <!-- Основной контейнер с заголовком и кнопками -->
+  <div class="main-container">
+    <h1>Добро пожаловать на Kaznos Server! ⛏️</h1>
 
-  <!-- Информация о сервере -->
-  <div class="server-info">
-    Заходи на наш сервер:<br />
-    <a href="https://kaznos.mclan.ru " target="_blank" rel="noopener noreferrer">kaznos.mclan.ru</a><br />
-    <a href="https://kaznos.sosal.today " target="_blank" rel="noopener noreferrer">kaznos.sosal.today</a>
-  </div>
+    <!-- Онлайн игроков -->
+    <div class="online-count">
+      Игроков онлайн:
+      <span id="playerCount">Загрузка... <span class="cursor">_</span></span>
+    </div>
 
-  <!-- Онлайн игроков -->
-  <div class="online-count">
-    Игроков онлайн:
-    <span id="playerCount">Загрузка... <span class="cursor">_</span></span>
-  </div>
-
-  <!-- Кнопки скачивания -->
-  <div class="download-buttons">
-    <a href="https://drive.google.com/file/d/1_Bax8Kw3u8lmyaDf-1dJ6KS3TkXN96ux/view?usp=sharing" target="_blank" class="download-button">
-      Скачать AstralRinth
-    </a>
-    <a href=" https://drive.google.com/file/d/1f8RNDsfWDGalx3bU6S3dRsvoTOIBGZ1J/view?usp=sharing" target="_blank" class="download-button">
-      Скачать модпак
-    </a>
+    <!-- Кнопки скачивания -->
+    <div class="download-buttons">
+      <a href="https://drive.google.com/file/d/1_Bax8Kw3u8lmyaDf-1dJ6KS3TkXN96ux/view?usp=sharing" target="_blank" class="download-button">
+        Скачать AstralRinth
+      </a>
+      <a href=" https://drive.google.com/file/d/1f8RNDsfWDGalx3bU6S3dRsvoTOIBGZ1J/view?usp=sharing" target="_blank" class="download-button">
+        Скачать модпак
+      </a>
+    </div>
   </div>
 
   <!-- Гайд по установке -->
